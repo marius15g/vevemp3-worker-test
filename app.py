@@ -111,12 +111,8 @@ def rate_limit(max_calls):
 _BAD_UA_RE = re.compile(
     r'(bot|crawler|spider|scraper|curl|wget|python-requests|java|'
     r'go-http|okhttp|axios|libwww|mechanize|scrapy|phantomjs|headless)', re.I)
-_BAD_HEADERS = {
-    'x-originating-ip',
-    'x-remote-addr',
-    'x-remote-ip',
-    'forwarded-for'
-}
+_BAD_HEADERS = {'via','x-forwarded-host','x-originating-ip',
+                'x-remote-addr','x-remote-ip','forwarded-for'}
 
 def block_bots(fn):
     @wraps(fn)
