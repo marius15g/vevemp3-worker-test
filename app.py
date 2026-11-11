@@ -119,9 +119,11 @@ def block_bots(fn):
     def wrapper(*args, **kwargs):
         ua = request.headers.get('User-Agent', '')
         if not ua or _BAD_UA_RE.search(ua):
+            log.warning('Worker request blocked by user-agent filter')
             abort(403)
         for h in _BAD_HEADERS:
             if request.headers.get(h):
+                log.warning('Worker request blocked by header filter: %s', h)
                 abort(403)
         return fn(*args, **kwargs)
     return wrapper
@@ -217,6 +219,7 @@ def require_vevemp3_token(fn):
         expected = os.environ.get('VEVEMP3_LOCAL_WORKER_TOKEN', '')
         provided = request.headers.get('X-Worker-Token', '')
         if not expected or not hmac.compare_digest(provided, expected):
+            log.warning('Worker auth rejected: token configured=%s; provided=%s', bool(expected), bool(provided))
             return jsonify({'error': 'Unauthorized'}), 403
         return fn(*args, **kwargs)
     return protected
