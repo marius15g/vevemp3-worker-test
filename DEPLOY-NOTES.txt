@@ -1,0 +1,11 @@
+VeVeMP3 online candidate - TEST ONLY
+Source: melamrahul/yt-ai, MIT license retained.
+Deploy as a NEW separate service, not over the current worker.
+Port: 8765. Health check: /healthz.
+Required secret: VEVEMP3_LOCAL_WORKER_TOKEN (same backend-to-worker token, never commit).
+Set SECRET_KEY to a unique random value in hosting environment.
+Do not set YOUTUBE_COOKIES_B64.
+/info and /stream require X-Worker-Token. /healthz is public.
+WARNING: cloud YouTube anti-bot may still prevent downloads.
+WARNING: backend Render currently uses POST /convert; this candidate offers GET /stream, so it is NOT drop-in compatible.
+Do not switch production backend or frontend until a staging end-to-end test passes.
